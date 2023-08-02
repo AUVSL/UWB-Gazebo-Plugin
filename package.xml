@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>gazebosensorplugins</name>
+  <name>uwb_gazebosensorplugins</name>
   <version>0.0.0</version>
   <description>The gazebosensorplugins package. Includes some plugins for Gazebo 9</description>
 
@@ -10,7 +10,9 @@
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>gazebo_ros</build_depend>
   <build_depend>roscpp</build_depend>
+  <build_depend>gazebo_plugins</build_depend>
   <run_depend>gazebo_ros</run_depend>
+  <run_depend>gazebo_plugins</run_depend>
   <run_depend>roscpp</run_depend>
   <build_depend>gtec_msgs</build_depend>
   <run_depend>gtec_msgs</run_depend>

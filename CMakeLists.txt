@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(gazebosensorplugins)
+project(uwb_gazebosensorplugins)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -14,6 +14,7 @@ add_definitions(-std=c++11)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  gazebo_plugins
   gazebo_ros
   roscpp
   std_msgs
@@ -45,6 +46,7 @@ add_dependencies(gtec_tag_pos_publisher_plugin ${catkin_EXPORTED_TARGETS})
 
 catkin_package(
   DEPENDS 
+   gazebo_plugins
     roscpp 
     gazebo_ros
     gtec_msgs
