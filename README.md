@@ -29,7 +29,7 @@ This project contains several plugins to use in Gazebo simulator:
 
 Libraries ```libignition-math4-dev``` and ```libgazebo9-dev``` must be installed before building this package.
 
-Also, package ```gtec_msgs``` must be present in the same work space. This package can be found here:  [https://github.com/valentinbarral/rosmsgs](https://github.com/valentinbarral/rosmsgs)
+Also, package ```gtec_msgs``` must be present in the same work space. This package can be found here:  [https://github.com/AUVSL/rosmsgs](https://github.com/AUVSL/rosmsgs)
 
 ### Build
 
@@ -62,6 +62,7 @@ To add the plugin to a Gazebo model, the next code must be present in the .sdf o
   <anchor_prefix>uwb_anchor</anchor_prefix>
   <all_los>false</all_los>
   <tag_id>0</tag_id>
+  <return_angle>true</return_angle>
 </plugin>
 ``` 
 
