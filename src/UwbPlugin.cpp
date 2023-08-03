@@ -665,11 +665,17 @@ namespace gazebo
             this->stepDBDistance = 0.1;
             this->allBeaconsAreLOS = false;
             this->useParentAsReference = false;
+            this->returnsAngle = false;
 
 
             if (_sdf->HasElement("all_los"))
             {
                 this->allBeaconsAreLOS = _sdf->Get<double>("all_los");
+            }
+
+            if (_sdf->HasElement("return_angle"))
+            {
+                this->returnsAngle = _sdf->Get<bool>("return_angle");
             }
 
             if (_sdf->HasElement("tag_id"))
@@ -1079,10 +1085,21 @@ namespace gazebo
                 {
                     losType = NLOS;
                 }
-                
 
                 if (losType!=NLOS)
                 {
+                    float angle;
+
+                    if(this->returnsAngle){
+
+                        angle = calculateAngle(tagPose, anchorPose);
+
+                        std::normal_distribution<double> distributionAngle(angle, 5./3. * M_PI / 180.); // < 5 deg of accuracy, assuming > 5 3std or more
+                        angle = distributionAngle(this->random_generator);
+                    }else{
+                        angle = std::nanf("1");
+                    }
+
                     gtec_msgs::Ranging ranging_msg;
                     ranging_msg.anchorId = aid;
                     ranging_msg.tagId = this->tagId;
@@ -1090,6 +1107,8 @@ namespace gazebo
                     ranging_msg.seq = this->sequence;
                     ranging_msg.rss = powerValue;
                     ranging_msg.errorEstimation = 0.00393973;
+                    ranging_msg.angle = angle;
+
                     this->gtecUwbPub.publish(ranging_msg);
                 }
             }
@@ -1139,6 +1158,18 @@ namespace gazebo
 
             markerArray.markers.push_back(marker);
         }
+    
+    public:
+     float calculateAngle(const ignition::math::Pose3d & tagPose, ignition::math::Pose3d & anchorPose){
+        ignition::math::Pose3d diff =  anchorPose - tagPose;
+        ignition::math::Vector3d pos = diff.Pos().Normalize();
+
+        double roll = 0;
+        double pitch = asin(pos.Z());
+        double yaw = atan2(pos.Y(), pos.X());
+
+        return yaw;
+    }
 
     public:
         void SetUpdateRate(double _rate)
@@ -1200,6 +1231,8 @@ namespace gazebo
         bool useParentAsReference;
     private:
         std::default_random_engine random_generator;
+    private:
+        bool returnsAngle;
     };
 
     GZ_REGISTER_MODEL_PLUGIN(UwbPlugin)
